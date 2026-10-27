@@ -22,7 +22,7 @@ PRIVATE_FILES = [".env", "CLAUDE.local.md", "AGENTS.md",
 PRIVATE_DIRS = ["data/", "reports/", "references/", "knowledge/", ".agents/", ".codex/"]
 SECRET = re.compile(r"(sk-(ant-)?[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|vck_[A-Za-z0-9]{20,}"
                     r"|AKIA[0-9A-Z]{16}|xox[abp]-[A-Za-z0-9-]{10,}|Bearer\s+[A-Za-z0-9._-]{24,})")
-EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[A-Za-z]{2,}\b")  # a letter TLD: not action@v10.3.2
 ALLOWED_EMAIL = re.compile(r"(?i)(noreply@anthropic\.com|[\w.+-]+@users\.noreply\.github\.com|[\w.+-]+@example\.(com|org))$")
 
 
@@ -89,6 +89,13 @@ def test_no_secrets_or_personal_emails_in_tracked_files():
                 if not ALLOWED_EMAIL.search(email):
                     found.append(f"{path}:{number}: e-mail {email}")
     assert not found, "\n".join(found)
+
+
+def test_email_pattern_catches_addresses_but_not_pinned_actions():
+    assert EMAIL.search("write to first.last@example.com today")
+    assert EMAIL.search("ops+alerts@example.org")
+    assert not EMAIL.search("- uses: astral-sh/setup-uv@v10.3.2")
+    assert not EMAIL.search("- uses: actions/checkout@v7")
 
 
 def private_terms() -> list[str]:
