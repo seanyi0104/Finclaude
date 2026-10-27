@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Privacy guard before every push. Turn it on once per clone:  git config core.hooksPath .githooks
+# Optional: git config finclaude.blockedRoot <first commit of a private history>  refuses any branch built on it.
+set -euo pipefail
+
+zero=0000000000000000000000000000000000000000
+blocked=$(git config --get finclaude.blockedRoot || true)
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$zero" ] && continue
+  if [ -n "$blocked" ] && git merge-base --is-ancestor "$blocked" "$local_sha" 2>/dev/null; then
+    echo "pre-push: $local_ref is built on private history ($blocked); push refused." >&2
+    exit 1
+  fi
+done
+
+uv run pytest -q -p no:cacheprovider tests/test_privacy.py

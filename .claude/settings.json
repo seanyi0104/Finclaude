@@ -1,0 +1,9 @@
+{
+  "env": {
+    "PYTHONUTF8": "1"
+  },
+  "permissions": {
+    "allow": ["Bash(uv run:*)", "Bash(git add:*)", "Bash(git commit:*)"],
+    "deny": ["Read(./.env)"]
+  }
+}
