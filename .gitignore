@@ -1,0 +1,28 @@
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Regenerable data and snapshots
+data/
+
+# Your private files: they stay on this computer and never go to git (tests/test_privacy.py checks this)
+CLAUDE.local.md
+profile/*
+!profile/*.example.md
+journal/*
+!journal/_template.md
+reports/
+knowledge/
+references/
+
+# Codex copy of the rules and skills (kept locally only)
+AGENTS.md
+.agents/
+.codex/
+
+# Personal Claude Code overrides
+.claude/settings.local.json
