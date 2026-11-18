@@ -6,10 +6,11 @@ For 2 weeks (10 trading days) and half a year (126 trading days):
   ATR(14), the highs and lows of the last 20 days, half year and 52 weeks, strength against a sector ETF and the market
 - every signal with the stock's own history: the share of days with the same signal that ended higher 10 / 126 trading
   days later, the median move, and the sample counted twice (days, and windows that do not overlap). Fewer than
-  MIN_INDEPENDENT windows is 证据不足; a difference inside twice the random noise is 没用
+  MIN_INDEPENDENT windows is 证据不足 (not enough evidence); a difference inside twice the random noise is 没用
+  (no use)
 - odds from history and options (finclaude.forecast) and Jev, compared only between sources with a scored record
 - option ranges to each horizon and the move priced for the next earnings day; fundamentals for the half year
-About the stock only: no holdings, account figures or IPS (CLAUDE.md 经验 2026-10-16), no buy or sell wording, and key
+About the stock only: no holdings, account figures or IPS (CLAUDE.md, Lessons), no buy or sell wording, and key
 prices come only from moving averages and past highs and lows. Every probability goes into journal/forecasts.csv.
 """
 from __future__ import annotations
@@ -179,7 +180,8 @@ def indicators(bars: pd.DataFrame, benchmarks: dict, sector: str = SECTOR, marke
 
 def trend_state(close: float, ma: dict) -> dict:
     """Long term from the close and MA50 against MA200. Short term from the close against MA10 and MA20: above both is
-    向上 once MA10 is above MA20 (转强 before), below both is 向下 once MA10 is below MA20 (转弱 before), between is 震荡."""
+    向上 (up) once MA10 is above MA20 (转强, turning up, before that), below both is 向下 (down) once MA10 is below
+    MA20 (转弱, turning down, before that), between is 震荡 (range-bound)."""
     if close > ma[200] and ma[50] > ma[200]:
         long = "上升"
     elif close < ma[200] and ma[50] < ma[200]:
@@ -1602,9 +1604,9 @@ def journal_rows(prep: dict) -> list[dict]:
 # --- the Decision card (v2): one screen per stock ----------------------------------------------------------
 
 # The card's lines, in order. Each name maps to a builder in CARD_BUILDERS; add or drop a line here. "terms" (the
-# card's words not yet marked 懂了 in the glossary, finclaude.glossary) can be passed in `fields`; it left the default
-# on 2026-10-20 at the user's request: repeated on every card, while the Decision tab's first line already points to
-# the glossary.
+# card's words not yet marked 懂了, "got it", in the glossary; finclaude.glossary) can be passed in `fields`; it left
+# the default on 2026-10-20 at the user's request: repeated on every card, while the Decision tab's first line
+# already points to the glossary.
 CARD_FIELDS = ("summary", "2w", "1m", "3m", "6m", "levels", "vix", "event", "signals", "fundamentals", "sources")
 LONG_WORDS = {"上升": "长线在上升", "下降": "长线在下降", "转换中": "长线方向不明（收盘和 MA50 在 MA200 两边）"}
 SHORT_WORDS = {"向上": "短线在上升", "转强": "短线刚转强", "震荡": "短线在横盘", "转弱": "短线在转弱", "向下": "短线在下降"}

@@ -1,22 +1,22 @@
 ---
 name: onboard
-description: 访谈我，建立或更新投资者画像和投资政策声明（IPS）。我说「建档」「更新画像」「重新评估风险偏好」时使用。
+description: Interviews me to build or update my investor profile and investment policy statement (IPS). Use when I say 「建档」 (set up my profile), 「更新画像」 (update my profile) or 「重新评估风险偏好」 (reassess my risk tolerance).
 ---
-# 建档访谈
+# Onboarding interview
 
-先用 finclaude.account 读取持仓快照（只读），让问题基于我的真实组合；OpenD 未连接就用 profile/holdings.csv，也没有就跳过并说明。
-一次只问 1–2 个问题，尽量给选项，允许我补充。按顺序覆盖：
-1. 现金流：月收入区间、月支出、储蓄率、收入稳定性
-2. 安全垫：应急金够几个月支出；有无信用卡、个人贷款等高息负债
-3. 目标：每个目标的金额、年份、重要程度（如 10 年后首付、30 年后退休）
-4. 经验：投过什么（美股、港股、ETF、期权、定投），最大一次亏损和当时的做法
-5. 风险承受（情景题）：组合一年内跌 10% / 20% / 35% 时，你会加仓、不动、减仓还是清仓
-6. 账户与税务：税务居民身份、基础货币、是否已提交 W-8BEN、能否接受汇率波动
-7. 约束：可投入的时间精力、不碰的行业、想尝试的标的类型
+First read the holdings snapshot with finclaude.account (read-only) so the questions rest on my real portfolio; if OpenD is not connected, use profile/holdings.csv; if that does not exist either, skip it and say so.
+Ask only 1–2 questions at a time, offer options where possible and let me add detail. Cover, in order:
+1. Cash flow: monthly income range, monthly spending, savings rate, income stability
+2. Safety net: how many months of spending the emergency fund covers; any high-interest debt such as credit cards or personal loans
+3. Goals: the amount, year and importance of each goal (e.g. a home deposit in 10 years, retirement in 30)
+4. Experience: what I have invested in (US stocks, Hong Kong stocks, ETFs, options, regular investing), my largest loss and what I did then
+5. Risk tolerance (scenarios): if the portfolio fell 10% / 20% / 35% within a year, would I buy more, hold, reduce or sell everything
+6. Accounts and tax: tax residency, base currency, whether the W-8BEN has been filed, whether I can accept currency swings
+7. Constraints: time and attention available, sectors I avoid, kinds of instruments I want to try
 
-产出：
-- profile/investor_profile.md：按 profile/investor_profile.example.md 的结构，写事实与我的原话（不写账户号）
-- profile/ips.md：按 profile/ips.example.md 的模板填写。比例由我来定：你只给 2–3 个与我回答一致的参考配置，并用 finclaude.backtest 算出各自的历史最大回撤和最长回本时间。
-- CLAUDE.local.md：按 CLAUDE.local.example.md 写我的账户、关注市场、基础货币、本地时区，有周报文档就写上链接。
-- profile/private_terms.txt：问我要不要列一份私人词（名字、邮箱、能认出我的账户数字），一行一个；tests/test_privacy.py 用它拦住误提交。
-- 全文读回给我确认后才写入文件。这些文件都只留在本机，不进 git。
+Output:
+- profile/investor_profile.md: facts and my own words, following the structure of profile/investor_profile.example.md (no account numbers)
+- profile/ips.md: filled in from the profile/ips.example.md template. The allocation is mine to decide: offer only 2–3 reference allocations consistent with my answers, each with its historical maximum drawdown and longest recovery computed with finclaude.backtest.
+- CLAUDE.local.md: my account, markets, base currency and local time zone, following CLAUDE.local.example.md, plus the weekly doc link if I have one.
+- profile/private_terms.txt: ask whether I want a list of private terms (names, e-mail addresses, account figures that identify me), one per line; tests/test_privacy.py uses it to block accidental commits.
+- Read everything back to me and write the files only after I confirm. All these files stay on this computer and never go into git.

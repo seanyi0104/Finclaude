@@ -1,8 +1,8 @@
-# <日期> <标的> <动作：买 / 卖 / 再平衡>
-- 金额与占组合比例：
-- 理由（三句话）：
-- 对应的 IPS 条款：
-- Jev 与基线结果（如有）：
-- 什么情况证明我错了：
-- 当时的情绪（1 平静 – 5 兴奋或恐慌）：
-- 复盘日期：
+# <date> <ticker> <action: buy / sell / rebalance>
+- Amount and share of the portfolio:
+- Reason (three sentences):
+- IPS rule it relates to:
+- Jev and baseline result (if any):
+- What would prove me wrong:
+- Mood at the time (1 calm – 5 excited or panicked):
+- Review date:

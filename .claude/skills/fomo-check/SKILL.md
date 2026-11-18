@@ -1,14 +1,14 @@
 ---
 name: fomo-check
-description: 从众买入检查。我提到「大家都在买」「朋友赚了」「再不上车就晚了」，或想买 IPS 之外的东西时使用。
+description: Herd-buying check. Use when I mention 「大家都在买」 (everyone is buying), 「朋友赚了」 (a friend made money) or 「再不上车就晚了」 (it will be too late if I don't get in now), or when I want to buy something outside my IPS.
 ---
-# 从众检查
-逐条问我，能算的用 Python 算：
-1. 我为什么现在想买？信息来自谁？
-2. 我能用三句话讲清它的赚钱逻辑吗？
-3. 它历史最大回撤是多少？按我打算投入的金额，那相当于亏多少澳元？
-4. 买入后它在组合里占多少？会超过 IPS 的仓位上限吗？
-5. 费率多少？有没有更便宜的同类？
-6. 和我已持有的产品重叠多少？（调用 /overlap）
-7. 交给 devils-advocate 子代理复核。
-最后把问答写入 journal/（用 journal/_template.md），建议我留出冷静期（时长在 IPS 里设定）再决定。
+# Herd-buying check
+Ask me these one at a time; compute in Python whatever can be computed:
+1. Why do I want to buy now? Who did the idea come from?
+2. Can I explain in three sentences how it makes money?
+3. What is its largest historical drawdown? At the amount I plan to invest, how many AUD would that be?
+4. What share of the portfolio would it be after the purchase? Would it exceed the position limit in my IPS?
+5. What does it cost to hold? Is there a cheaper equivalent?
+6. How much does it overlap with what I already hold? (call /overlap)
+7. Hand it to the devils-advocate subagent for review.
+Finally, write the questions and answers into journal/ (using journal/_template.md) and suggest a cooling-off period (its length is set in the IPS) before I decide.

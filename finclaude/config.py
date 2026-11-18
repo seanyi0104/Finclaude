@@ -22,4 +22,5 @@ class DataUnavailable(RuntimeError):
 
 
 class CostNotApproved(RuntimeError):
-    """A paid call was attempted before the user confirmed 端点 | 次数 | 单价 | 合计."""
+    """A paid call was attempted before the user confirmed the cost table 端点 | 次数 | 单价 | 合计
+    (endpoint | calls | unit price | total)."""

@@ -149,7 +149,8 @@ def preflight() -> dict:
 
 
 def quote(calls: int = 1) -> pd.DataFrame:
-    """端点 | 模型 | 次数 | 单价上限 | 合计上限 for planned Jev calls, priced live; the last row is the total."""
+    """The cost table 端点 | 模型 | 次数 | 单价上限 | 合计上限 (endpoint | model | calls | max unit price | max total)
+    for planned Jev calls, priced live; the last row is the total."""
     ceiling = _ceiling(_price_per_token(model_info()))
     return pd.DataFrame([
         {"端点": ENDPOINT, "模型": MODEL_ID, "次数": calls,

@@ -277,7 +277,7 @@ def test_card_leads_with_the_verdict_and_reads_line_by_line(monkeypatch, journal
     assert "期权 无可靠数据" in three and "Jev 无数据" in three
     for words in ("68%", "各 16%", "80%", "Cantor Fitzgerald", "原样引用", "328.7"):
         assert words in md, words
-    # about the stock only (CLAUDE.md 经验 2026-10-16): no holding amount and no AUD for a US stock
+    # about the stock only (CLAUDE.md, Lessons): no holding amount and no AUD for a US stock
     assert "735.35" not in md and "澳元" not in md and "你的持仓" not in md
     hist = prep["history"]["1m"]["all"]
     assert f"{100.0 * (1 + hist['p10']):.2f}–{100.0 * (1 + hist['p90']):.2f} 美元" in md
@@ -285,7 +285,7 @@ def test_card_leads_with_the_verdict_and_reads_line_by_line(monkeypatch, journal
     option = next(line for line in lines if "隐含波动率" in line)
     for words in ("NVDA 自己的期权", "看涨", "看跌", "行权价 100.00", "2026-11-06 到期", "30 天"):
         assert words in option, words
-    assert "未到期" not in md  # nothing scored yet: no column full of 未到期
+    assert "未到期" not in md  # nothing scored yet: no column full of 未到期 (not yet due)
     assert "买入 /" not in md and "建议" not in md  # Claude's own voice never says buy or sell
 
 

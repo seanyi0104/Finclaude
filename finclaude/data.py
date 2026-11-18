@@ -1,6 +1,6 @@
 """Unified market-data entry point.
 
-Routing (CLAUDE.md, 数据优先级):
+Routing (CLAUDE.md, Data priority):
 - Hong Kong (*.HK), ASX (*.AX), indices (^...), FX (...=X): yfinance
 - US tickers: Treg (Tiingo) when TREG_TOKEN is set, otherwise yfinance; the `source` column says which
 - VIX and VXN closes as published: Cboe's own history files (get_cboe_history), the official source yfinance is checked against

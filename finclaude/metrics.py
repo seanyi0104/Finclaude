@@ -46,8 +46,9 @@ def max_drawdown(prices: pd.Series) -> float:
 
 
 def review_line(prices: pd.Series, first_buy, line: float = -0.30) -> dict | None:
-    """IPS 论点复查线: the last close against the highest close since the first buy, and the price that would
-    reach the line. Closes before the buy never count. None without a buy date (e.g. shares from a stock grant)."""
+    """The IPS thesis-review line (论点复查线): the last close against the highest close since the first buy, and
+    the price that would reach the line. Closes before the buy never count. None without a buy date (e.g. shares
+    from a stock grant)."""
     if first_buy is None or pd.isna(first_buy):
         return None
     p = prices.dropna()

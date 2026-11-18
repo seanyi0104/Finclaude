@@ -1,33 +1,33 @@
-# 投资者画像　建档：<日期>（/onboard）
+# Investor profile — created <date> (/onboard)
 
-> /onboard 访谈后生成 profile/investor_profile.md（只留在本机，不进 git）：写事实与你的原话，不写账户号。本文件只是结构示例。
+> After the interview, /onboard writes profile/investor_profile.md (it stays on this computer and is not tracked by git): facts and your own words, never account numbers. This file only shows the structure.
 
-## 基本情况
-- 所在地、基础货币，未来一两年的大变化（换城市、换工作、搬家等）：
+## Basics
+- Where you live, your base currency, and any big changes in the next year or two (moving, changing jobs, etc.):
 
-## 1. 现金流
-- 月收入区间、月支出、储蓄率、收入稳定性：
+## 1. Cash flow
+- Monthly income range, monthly spending, savings rate, income stability:
 
-## 2. 安全垫
-- 应急金够几个月支出：
-- 高息负债（信用卡、个人贷款）：
+## 2. Safety net
+- How many months of spending the emergency fund covers:
+- High-interest debt (credit cards, personal loans):
 
-## 3. 目标
-| 目标 | 金额 | 年份 | 重要程度 |
+## 3. Goals
+| Goal | Amount | Year | Importance |
 |---|---|---|---|
-| <如：首付> | | | |
+| <e.g. home deposit> | | | |
 
-## 4. 经验
-- 投过什么（美股、港股、ETF、期权、定投），最大一次亏损和当时的做法：
+## 4. Experience
+- What you have invested in (US stocks, Hong Kong stocks, ETFs, options, regular investing), your largest loss and what you did then:
 
-## 5. 风险承受
-- 组合一年内跌 10% / 20% / 35% 时，你会加仓、不动、减仓还是清仓：
+## 5. Risk tolerance
+- If the portfolio fell 10% / 20% / 35% within a year, would you buy more, hold, reduce or sell everything:
 
-## 6. 账户与税务
-- 券商、税务居民身份、是否已提交 W-8BEN、能否接受汇率波动（不确定的写「待核实」）：
+## 6. Accounts and tax
+- Broker, tax residency, whether the W-8BEN has been filed, whether you can accept currency swings (write "to be checked" where unsure):
 
-## 7. 约束与偏好
-- 可投入的时间精力、不碰的行业、想尝试的标的类型：
+## 7. Constraints and preferences
+- Time and attention available, sectors you avoid, kinds of instruments you want to try:
 
-## 持仓
-- 由 finclaude.account（只读）读到的快照；没有接券商就手填 profile/holdings.csv（列：code, name, market, qty, currency, market_value）。
+## Holdings
+- The snapshot read by finclaude.account (read-only); without a broker connection, fill in profile/holdings.csv by hand (columns: code, name, market, qty, currency, market_value).

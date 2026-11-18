@@ -1,61 +1,61 @@
-# 投资政策声明（IPS）v1　生效日：<日期>
+# Investment Policy Statement (IPS) v1 — effective <date>
 
-> /onboard 会按本模板生成 profile/ips.md（只留在本机，不进 git）。「组合」= 账户总资产（持仓加账户里的现金）；应急金不计入。比例和规则由你决定，Claude 只按本文检查并提醒。
+> /onboard creates profile/ips.md from this template (it stays on this computer and is not tracked by git). "Portfolio" means total account assets (holdings plus the cash in the account); the emergency fund is not included. The allocation and the rules are yours to decide; Claude only checks against this document and reminds you.
 >
-> 本文的数字都是**提醒线**，不是禁令（禁止事项一节除外）：超出时，Claude 只在月度体检（/checkup）和你说「想买 / 想卖」时提醒，直到回到线内或你改规则。修改时写明理由并升级版本号。
+> Every number in this document is a **reminder line**, not a ban (except the prohibited actions): when a line is exceeded, Claude reminds you only in the monthly check-up (/checkup) and when you say you want to buy or sell, until it is back inside the line or you change the rule. When you change something, write down why and bump the version number.
 
-## 目标
-- 主目标：<金额、年份、用途>
-- 资金：<已入金多少；以后每月入金多少，没定就写「待定」>
-- 需要的长期年化收益：<用 finclaude.planning 反推；每次体检按实际入金重算>
+## Goals
+- Main goal: <amount, year, purpose>
+- Money in: <how much has been deposited; how much per month from now on, or "to be decided">
+- Long-term annual return needed: <backed out with finclaude.planning; recomputed at every check-up from actual deposits>
 
-## 风险预算
-- 可承受的最大回撤：<如 30%，同时写成按今天组合算的金额>
-- 应急金：<几个月支出，放在组合之外>
-- 参考回测：<用 finclaude.backtest 算的候选配置：最大回撤、最长回本时间。仅供参考>
+## Risk budget
+- Maximum drawdown you can tolerate: <e.g. 30%, also written as an amount based on today's portfolio>
+- Emergency fund: <months of spending, kept outside the portfolio>
+- Reference backtest: <candidate allocations computed with finclaude.backtest: maximum drawdown, longest recovery; for reference only>
 
-## 仓位
-| 仓 | 放什么 | 目标 / 上限 |
+## Buckets
+| Bucket | What goes in | Target / limit |
 |---|---|---|
-| 长期仓 | 宽基指数 ETF，慢慢买、长期拿 | <如 60%，或「待定」> |
-| 短线仓 | 个股、杠杆 ETF、期权 | <上限，或「不设」> |
-| 现金 | 账户里的现金 | — |
+| Long-term | Broad index ETFs, bought gradually and held for the long run | <e.g. 60%, or "to be decided"> |
+| Short-term | Individual stocks, leveraged ETFs, options | <limit, or "none"> |
+| Cash | Cash in the account | — |
 
-- 回归方式（长期仓怎么回到目标比例）：<如：月度体检时提醒差多少，由我当场决定>
+- Rebalancing method (how the long-term bucket gets back to its target): <e.g. the monthly check-up shows the gap and I decide on the spot>
 
-## 持仓分类（哪只归哪个仓）
-| 持仓 | 市场 | 归类 | 说明 |
+## Holding classification (which holding goes in which bucket)
+| Holding | Market | Bucket | Notes |
 |---|---|---|---|
-| <代码> | <市场，币种> | <长期仓 / 短线仓> | <跟踪什么；杠杆几倍> |
-| 新买入的标的 | — | 默认短线仓 | 宽基指数 ETF 由我确认后归长期仓 |
+| <ticker> | <market, currency> | <long-term / short-term> | <what it tracks; leverage> |
+| Any new purchase | — | Short-term by default | Broad index ETFs move to long-term after I confirm |
 
-## 执行规则
-- 入金：<每月多少，或「暂无」>
-- 再平衡：<什么时候看、怎么提醒>
-- 选基门槛：规模 ≥ 1 亿美元、成立 ≥ 1 年、日均成交额 ≥ 100 万美元、价差 ≤ 0.30%（chia Y 的默认值，可改）
-- 下单前：写一页决策单（为什么买、什么情况算我错了、最多愿意亏多少），存进 journal/（模板 journal/_template.md），到期复盘
-- 加仓：<如：分 2–3 次，每次之间至少隔 48 小时>
-- 冷静期：<如：计划外买入先等 48 小时，或「不要求」>
+## Execution rules
+- Deposits: <amount per month, or "none for now">
+- Rebalancing: <when to look, and how to remind me>
+- Fund selection thresholds: size ≥ USD 100 million, at least 1 year old, average daily traded value ≥ USD 1 million, spread ≤ 0.30% (chia Y's defaults; change them as you like)
+- Before an order: write a one-page decision note (why buy, what would prove me wrong, the most I am willing to lose), save it in journal/ (template: journal/_template.md) and review it when it is due
+- Adding to a position: <e.g. in 2–3 tranches at least 48 hours apart>
+- Cooling-off period: <e.g. unplanned purchases wait 48 hours, or "not required">
 
-## Jev 使用规则
-- 用于选择题（/sector-pick、/etf-pick、/overlap）和预测卡的综合概率；长期仓的比例由本 IPS 决定，不交给 Jev
-- 出卡时在每月额度内自动调用（finclaude.jev.auto_budget，默认 1 美元），超线先问我；选择题先列费用等我确认
-- Jev 与规则基线不一致时：<以基线为准，或照实写「不一致」，不替我挑>
-- 每月 Treg + Jev 费用上限：<金额>
+## Jev usage
+- Used for choice questions (/sector-pick, /etf-pick, /overlap) and for the combined probability on forecast cards; the long-term allocation is set by this IPS, never by Jev
+- Called automatically for cards within a monthly budget (finclaude.jev.auto_budget, default USD 1); above that, ask me first; choice questions show the cost and wait for my confirmation
+- When Jev disagrees with the rule-based baseline: <follow the baseline, or report 「不一致」 (disagree) as it is without choosing for me>
+- Monthly cap on Treg + Jev costs: <amount>
 
-## 税务与汇率
-- 基础货币、税务居民身份、W-8BEN 是否已提交（不确定的写「待核实」，并写什么时候问谁）：
+## Tax and currency
+- Base currency, tax residency, whether the W-8BEN has been filed (write "to be checked" where unsure, with when and whom to ask):
 
-## 禁止事项
-- 借钱投资、融资融券；卖出无备兑期权
-- 因为「别人在买」而买（先跑 /fomo-check）
+## Prohibited actions
+- Investing with borrowed money, margin trading; selling uncovered options
+- Buying because "others are buying" (run /fomo-check first)
 
-## 风险提示（月度体检和我说想买 / 想卖时列出；只提示，不限制）
-1. 各仓占比，和目标差多少
-2. 压力亏损：每只「市值 × 历史上最坏一次回撤」和合计，对照可承受的最大回撤
-3. 杠杆 ETF 按等值敞口计（如 3 倍 ETF = 3 × 市值），并注明每日杠杆的长期损耗
-4. 分批加仓有没有照规则
+## Risk reminders (listed in the monthly check-up and when I say I want to buy or sell; they inform, they do not restrict)
+1. Each bucket's share, and the gap to its target
+2. Stress loss: each holding's "market value × worst historical drawdown", and the total, against the maximum drawdown you can tolerate
+3. Leveraged ETFs counted at equivalent exposure (e.g. a 3x ETF = 3 × market value), noting the long-term decay of daily leverage
+4. Whether staged buying followed the rules
 
-## 复盘
-- 必须复盘的时点：<如：大额入金、收入或生活大变化、基础货币改变时>
-- 版本记录：v1（<日期>）：建档
+## Reviews
+- When a review is required: <e.g. a large deposit, a big change in income or life, a change of base currency>
+- Version history: v1 (<date>): created

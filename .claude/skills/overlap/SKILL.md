@@ -1,21 +1,21 @@
 ---
 name: overlap
-description: 检查我持有或打算买的几只基金是否重复，由 Jev 判断是否冗余、重复组里留哪只。我问「这几只重不重叠」「分散够不够」时使用；/checkup 每季度也会调用。
+description: Checks whether funds I hold or plan to buy duplicate each other; Jev judges which pairs are redundant and which fund to keep in each redundant group. Use when I ask 「这几只重不重叠」 (do these overlap) or 「分散够不够」 (am I diversified enough); /checkup also calls it once a quarter.
 ---
-# 持仓重叠检查
-> 方法和阈值改编自 chia Y《You Buy Because Other People are Buying》（2026-09-29）里的「查重叠」提示词：https://withchia.substack.com/p/you-buy-because-other-people-are
+# Fund overlap check
+> Method and thresholds adapted from the 「查重叠」 (overlap check) prompt in chia Y's "You Buy Because Other People are Buying" (2026-09-29): https://withchia.substack.com/p/you-buy-because-other-people-are
 
-角色：数据工程。取数、计算、整理；判断交给 Jev。不用买卖用语。失败即停并报告。
+Role: data engineering. Fetch data, compute, organise; the judgement goes to Jev. No buy or sell wording. Stop and report on any failure.
 
-0. 先问我要比较哪些基金（至少 2 只；默认用 profile/holdings.csv 里的全部 ETF），展示清单等我确认；再列出 Treg 费用等我确认。
-1. 数据：每只的前 50 大持仓与权重（拿不到就用前十大）、1 年日线、费率、规模；注明持仓披露日期。
-2. 每一对计算（两位小数；跨市场时按共同交易日对齐；用 finclaude.metrics）：
-   - overlap_pct = 共同持仓的较小权重之和
-   - shared_top10 = 前十大重合数
-   - corr_1y = 1 年日收益相关性
-   - corr_stress = 基准（美股 SPY、港股 2800.HK）最差 10% 交易日上的相关性
-   - te_1y = 相互跟踪误差
-3. Jev：D1、D2 各一次调用。先用 finclaude.jev.quote(2) 列出费用，等我确认后调用 finclaude.jev.evaluate(..., max_cost_usd=确认的单价上限, save_as=报告文件夹/jev_D1.json 或 jev_D2.json)。D1 每一对选「重复 / 部分重叠 / 分散」；P(重复) ≥ 0.5 的对连成组；D2 每组选留哪只（state 写每只的费率、规模、组内跟踪误差）。
-4. 基线：相关性 ≥ 0.95 或重叠度 ≥ 50% 判重复（阈值可在 IPS 改），组内留费率最低的；报告是否一致。
-产出：结论要点写进当周周报文档的 Decision；文件存到 reports/<周>/_附件/overlap/：pairs.csv、top10_side_by_side.csv（共同持仓标 *）、jev_D1.json、jev_D2.json、report.html（用 finclaude.render.save_report 生成）。
-结尾提醒：危机时相关性会上升，分散能降低风险，但不能消除风险。
+0. Ask me which funds to compare (at least 2; by default every ETF in profile/holdings.csv) and show the list for my confirmation; then list the Treg cost and wait for my confirmation.
+1. Data: each fund's top 50 holdings and weights (the top 10 if that is all that is available), one year of daily prices, expense ratio and size; note the holdings disclosure date.
+2. For every pair (two decimals; across markets, align on common trading days; use finclaude.metrics):
+   - overlap_pct = sum of the smaller weight of each shared holding
+   - shared_top10 = number of top-10 holdings in common
+   - corr_1y = correlation of daily returns over one year
+   - corr_stress = correlation on the benchmark's worst 10% of days (SPY for US funds, 2800.HK for Hong Kong funds)
+   - te_1y = tracking error between the two
+3. Jev: one call each for D1 and D2. Show the cost with finclaude.jev.quote(2), wait for my confirmation, then call finclaude.jev.evaluate(..., max_cost_usd=the confirmed unit-price cap, save_as=<report folder>/jev_D1.json or jev_D2.json). D1: for each pair, choose 「重复 / 部分重叠 / 分散」 (redundant / partly overlapping / diversified); pairs with P(redundant) ≥ 0.5 are linked into groups. D2: for each group, choose which fund to keep (state lists each fund's expense ratio, size and tracking error within the group).
+4. Baseline: a pair is redundant when correlation ≥ 0.95 or overlap ≥ 50% (thresholds can be changed in the IPS); keep the cheapest fund in each group; report whether Jev agrees.
+Output: key conclusions go into this week's Decision page; files go to reports/<week>/_附件/overlap/: pairs.csv, top10_side_by_side.csv (shared holdings marked *), jev_D1.json, jev_D2.json and report.html (built with finclaude.render.save_report).
+Closing reminder: correlations rise in a crisis; diversification lowers risk but does not remove it.

@@ -1,4 +1,5 @@
-"""The glossary marks (懂了 / 半懂 / 不懂) kept from the weekly doc, and the card's pointer to words not yet 懂了."""
+"""The glossary marks (懂了 got it / 半懂 partly / 不懂 not yet) kept from the weekly doc, and the card's pointer to
+words not yet 懂了."""
 import pytest
 
 from finclaude import glossary
@@ -28,7 +29,7 @@ def test_marks_are_kept_with_their_date(marks):
 
 def test_only_words_the_card_uses_and_not_yet_known_are_listed(marks):
     words = glossary.unknown_terms(CARD)
-    assert "收盘价" not in words  # marked 懂了
+    assert "收盘价" not in words  # marked 懂了 (got it)
     assert "上涨概率：Jev" not in words  # the card has no Jev number
     assert "市盈率（P/E）" not in words  # not in this card
     assert words == ["均线（MA20、MA200）", "长线 / 短线趋势", "正常波动区间（68%）", "上涨概率：历史", "上涨概率：期权",

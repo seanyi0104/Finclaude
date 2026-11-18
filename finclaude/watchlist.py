@@ -1,4 +1,4 @@
-"""The watchlist (关注池): the companies the user follows, sorted into the areas they care about (2026-10-20: the M7,
+"""The watchlist (关注池): the companies the user follows, sorted into the areas they care about (by default the M7,
 semiconductors, energy, the industries AI reaches, plus the long-term index funds). It grows as they chat: when a
 stock outside it comes up, they are asked whether to add it and where it belongs. The weekly doc's 关注池 tab shows
 the same table, one section per area, so they can see the map of what they follow.
@@ -54,13 +54,13 @@ def held_tickers() -> set[str]:
     """Data tickers of the last saved holdings (profile/holdings.csv); empty when there is none."""
     try:
         return {data.ticker_from_code(code).upper() for code in account.load_holdings()["code"]}
-    except Exception:  # noqa: BLE001 - the table is still shown, without the 持仓 marks
+    except Exception:  # noqa: BLE001 - the table is still shown, without the 持仓 (holding) marks
         return set()
 
 
 def markdown(held: set[str] | None = None) -> str:
-    """The 关注池 tab: one section per area with a one-line description and a table; an area the user named but has no
-    company yet says so, as a reminder of where they meant to look."""
+    """The 关注池 (watchlist) tab: one section per area with a one-line description and a table; an area the user
+    named but has no company yet says so, as a reminder of where they meant to look."""
     table, held = load(), {t.upper() for t in (held_tickers() if held is None else held)}
     order = list(BUCKETS) + [b for b in dict.fromkeys(table["bucket"]) if b not in BUCKETS]
     lines = [f"按你关心的方向归类，共 {len(table)} 家。「持仓」按最近一次读到的账户标出；聊到新公司时我会问要不要加进来。", ""]

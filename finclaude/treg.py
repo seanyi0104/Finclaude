@@ -134,7 +134,8 @@ def _price_micro(endpoint_id: str) -> int:
 
 
 def quote(plan: dict[str, int]) -> pd.DataFrame:
-    """端点 | 数据商 | 次数 | 单价 | 合计 for planned calls, priced from the catalog; the last row is the total."""
+    """The cost table 端点 | 数据商 | 次数 | 单价 | 合计 (endpoint | provider | calls | unit price | total) for
+    planned calls, priced from the catalog; the last row is the total."""
     rows, total = [], 0
     for endpoint_id, count in plan.items():
         price = _price_micro(endpoint_id)

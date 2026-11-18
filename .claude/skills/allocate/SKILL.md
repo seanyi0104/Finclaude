@@ -1,15 +1,15 @@
 ---
 name: allocate
-description: 配置实验室。对 IPS 里的候选配置做历史回测和情景模拟，比较风险与收益。我说「回测」「比较配置」「我的配置合不合理」时使用。
+description: Allocation lab. Backtests the candidate allocations in my IPS and simulates scenarios to compare risk and return. Use when I say 「回测」 (backtest), 「比较配置」 (compare allocations) or 「我的配置合不合理」 (is my allocation reasonable).
 ---
-# 配置实验室
-角色：取数、计算、可视化。不下买卖结论。所有数学用 Python。失败即停并报告。
-不调用 Jev：核心配置比例由我在 IPS 里定。
+# Allocation lab
+Role: fetch data, compute, visualise. No buy or sell conclusions. All maths in Python. Stop and report on any failure.
+Jev is not used: the core allocation is mine to set in the IPS.
 
-0. 先问我：候选配置（2–3 套，写清资产和权重）、投入方式（一次性 / 每月金额）、再平衡规则。确认后再动手。
-1. 数据：用 finclaude.data 取各资产尽可能长的日线，尽量覆盖 2008、2020、2022 等大跌年份；用 get_fx("AUDUSD=X") 把所有资产换算成澳元计算；长度不一致时说明对齐方式。
-2. 指标（每套配置，用 finclaude.backtest 与 finclaude.metrics）：年化收益、年化波动、最大回撤、最长回本时间、最差 12 个月收益、夏普比率。
-3. 情景：用 block_bootstrap 做 1000 次模拟，给出达到 IPS 目标金额的概率，以及 10% / 50% / 90% 分位终值。
-4. 基线：100% 宽基，以及 60/40 每年再平衡。
-5. 对照 IPS：历史最大回撤超过我承受上限的配置，直接标红。
-产出：结论要点写进当周周报文档的 Decision；文件存到 reports/<周>/_附件/allocate/：report.html（用 finclaude.render.save_report 生成）、metrics.csv、dashboard.html（净值曲线、回撤曲线、风险收益散点；页脚写 as-of、数据源、「非投资建议」）。
+0. Ask me first: the candidate allocations (2–3, with assets and weights), how money goes in (lump sum / monthly amount) and the rebalancing rule. Start only after I confirm.
+1. Data: pull the longest daily history available for each asset with finclaude.data, ideally covering drawdown years such as 2008, 2020 and 2022; convert every asset to AUD with get_fx("AUDUSD=X"); if histories differ in length, state how they were aligned.
+2. Metrics (per allocation, with finclaude.backtest and finclaude.metrics): annualised return, annualised volatility, maximum drawdown, longest time to recover, worst 12-month return, Sharpe ratio.
+3. Scenarios: 1,000 simulations with block_bootstrap; report the probability of reaching the IPS target amount and the 10% / 50% / 90% percentile end values.
+4. Baselines: 100% broad index, and 60/40 rebalanced yearly.
+5. Against the IPS: flag in red any allocation whose historical maximum drawdown exceeds the drawdown I can tolerate.
+Output: key conclusions go into this week's Decision page of the weekly doc; files go to reports/<week>/_附件/allocate/: report.html (built with finclaude.render.save_report), metrics.csv and dashboard.html (equity curve, drawdown curve, risk–return scatter; footer with the as-of date, data sources and 「非投资建议」 (not investment advice)).

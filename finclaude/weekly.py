@@ -1,5 +1,6 @@
-"""The weekly rhythm (CLAUDE.md「每周交付」): a week is Monday to Friday of US trading, New York time. Each week has one
-tab in the weekly doc (News / Decision / Lesson under it) and one folder of trimmed archives, reports/<week>/.
+"""The weekly rhythm (CLAUDE.md, Where files go: the weekly deliverables): a week is Monday to Friday of US trading,
+New York time. Each week has one tab in the weekly doc (News / Decision / Lesson under it) and one folder of trimmed
+archives, reports/<week>/.
 
 The Friday review of holdings is the one place that reads the account (read-only, finclaude.account): what the
 whole account made or lost this week, what each holding did and its normal range for the next two weeks. Each week's
@@ -20,8 +21,9 @@ GLOSSARY_ORDER = "z0"  # the glossary tab sorts after every week tab
 CURRENCY_WORDS = {"USD": "美元", "AUD": "澳元", "HKD": "港元"}
 POSITIONS_ONLY = pd.DataFrame(columns=["code", "name", "market", "side", "qty", "price", "time"])
 WEEKLY_DIR = DATA_DIR / "weekly"
-# Moomoo's names for money moved between the account and a bank (2026-10-19: deposits came as 银行转存). Dividends,
-# interest, tax, currency exchange and trade settlement stay inside the account and count in the week's result.
+# Moomoo's names for money moved between the account and a bank (deposits arrive as 银行转存, a bank transfer in).
+# Dividends, interest, tax, currency exchange and trade settlement stay inside the account and count in the week's
+# result.
 BANK_WORDS = ("银行", "入金", "出金", "提款", "提取")
 # While US stocks trade (pre-market, regular, after-hours or overnight) Moomoo values US holdings at the price of the
 # moment (e.g. at 01:59 New York on a Monday it uses the overnight price, not Friday's close).
@@ -173,8 +175,8 @@ def _week_sentence(week: dict) -> str:
 
 
 def review_markdown(rows: list[dict], funds: dict, monday: dt.date, friday: dt.date, week: dict | None = None) -> str:
-    """持仓回顾和展望, written after Friday's close: the account total and the week's result first, then one line per
-    holding."""
+    """The 持仓回顾和展望 section (holdings review and outlook), written after Friday's close: the account total and
+    the week's result first, then one line per holding."""
     converted = f"；外币市值按 {funds['fx']}换算成澳元" if funds.get("fx") else ""
     lines = [f"## 持仓回顾和展望（{tab_name(monday)}，周五盘后）", "",
              f"总资产 {funds['total_assets']:,.0f} 澳元，现金 {funds['cash']:,.0f} 澳元（{funds.get('source', 'Moomoo 只读')}，"
@@ -189,7 +191,7 @@ def review_markdown(rows: list[dict], funds: dict, monday: dt.date, friday: dt.d
         unit = CURRENCY_WORDS.get(r["currency"], r["currency"])
         c = r["change"]
         parts = [f"本周 {c['change']:+.1%}（{c['start']:.2f} → {c['end']:.2f} {unit}）"]
-        if r.get("cost"):  # only what happened since the buy counts for the holder (CLAUDE.md 经验 2026-10-06)
+        if r.get("cost"):  # only what happened since the buy counts for the holder (CLAUDE.md, Lessons)
             parts.append(f"你的成本 {r['cost']:.2f} → {c['end']:.2f}（{c['end'] / r['cost'] - 1:+.1%}）")
         elif r.get("cost") == 0:
             parts.append("送股，没有成本")

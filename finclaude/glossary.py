@@ -1,6 +1,7 @@
-"""The glossary marks (懂了 / 半懂 / 不懂) from the weekly doc's 术语表 tab, kept in profile/glossary.json, so a Decision
-card can end with the words it uses that are not yet marked 懂了 (CLAUDE.md 输出约定: such words point to the
-glossary). Copy the marks in with save() whenever the tab is read (/week, or the first chat of a day).
+"""The glossary marks (懂了 got it / 半懂 partly / 不懂 not yet) from the weekly doc's 术语表 (glossary) tab, kept in
+profile/glossary.json, so a Decision card can end with the words it uses that are not yet marked 懂了 (CLAUDE.md,
+Output conventions: such words point to the glossary). Copy the marks in with save() whenever the tab is read (/week,
+or the first chat of a day).
 """
 from __future__ import annotations
 
@@ -12,7 +13,7 @@ from .config import PROFILE_DIR
 
 GLOSSARY_JSON = PROFILE_DIR / "glossary.json"
 KNOWN = "懂了"
-# Each glossary term (as named in the 术语表 tab, in its order) and what shows it in a card.
+# Each glossary term (as named in the 术语表, glossary, tab, in its order) and what shows it in a card.
 CARD_TERMS = {
     "收盘价": r"收盘",
     "均线（MA20、MA200）": r"MA\d|均线",
@@ -38,8 +39,8 @@ CARD_TERMS = {
 
 
 def marks_from_doc(xml: str) -> dict[str, str]:
-    """The marks in a read of the 术语表 tab (the xml a docs read returns): each row's first cell is the term, the
-    dropdown in its last cell the mark ("" when left unmarked); the header row is skipped."""
+    """The marks in a read of the 术语表 (glossary) tab (the xml a docs read returns): each row's first cell is the
+    term, the dropdown in its last cell the mark ("" when left unmarked); the header row is skipped."""
     marks = {}
     for row in ET.fromstring(xml).iter("row"):
         cells = row.findall("cell")
@@ -51,7 +52,7 @@ def marks_from_doc(xml: str) -> dict[str, str]:
 
 
 def save(marks: dict[str, str], as_of: str) -> None:
-    """Keep the marks as read from the 术语表 tab ("" for a row left unmarked) and the date they were read."""
+    """Keep the marks as read from the 术语表 (glossary) tab ("" for a row left unmarked) and the date they were read."""
     GLOSSARY_JSON.write_text(json.dumps({"as_of": as_of, "source": "周报文档「术语表」", "terms": marks},
                                         ensure_ascii=False, indent=1), encoding="utf-8")
 
@@ -69,13 +70,14 @@ def as_of() -> str | None:
 
 
 def unknown_terms(text: str, marks: dict[str, str] | None = None) -> list[str]:
-    """Glossary terms the text uses that are not marked 懂了, in the glossary's order."""
+    """Glossary terms the text uses that are not marked 懂了 (got it), in the glossary's order."""
     marks = load() if marks is None else marks
     return [term for term, shown in CARD_TERMS.items() if marks.get(term) != KNOWN and re.search(shown, text)]
 
 
 def pointer(text: str, marks: dict[str, str] | None = None) -> str | None:
-    """The card's last line: its words not yet 懂了, short names, pointing to the glossary; None when there are none."""
+    """The card's last line: its words not yet marked 懂了 (got it), short names, pointing to the glossary; None when
+    there are none."""
     groups: list[tuple[str, list[str]]] = []
     for term in unknown_terms(text, marks):
         head, _, tail = term.split("（")[0].strip().partition("：")

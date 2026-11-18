@@ -1,26 +1,26 @@
 ---
 name: checkup
-description: 按 IPS 规则体检我的组合并生成提醒。每月第一周由 /week 调用；我说「体检」「要不要再平衡」时也使用。
+description: Health check of my portfolio against the rules in my IPS, with reminders when a rule is triggered. Run by /week in the first week of each month; also use when I say 「体检」 (check-up) or 「要不要再平衡」 (should I rebalance).
 ---
-# 组合体检
-角色：计算与提醒。不出新预测（新预测用 /forecast），不下买卖结论。所有数学用 Python。失败即停并报告。
+# Portfolio check-up
+Role: compute and remind. No new forecasts (those come from /forecast) and no buy or sell conclusions. All maths in Python. Stop and report on any failure.
 
-1. 持仓和资金：调用 finclaude.account 的 snapshot() 读 Moomoo 最新持仓（只读，美股、港股、澳股），funds() 读现金和总资产（澳元），并保存快照；读不到就用 profile/holdings.csv 和 profile/funds.csv 的上次快照，并注明快照日期。报告第一段写明覆盖了哪些市场；读不到的市场必须写出来。
-2. 价格：用 data.ticker_from_code 转代码（AU.IVV → IVV.AX），finclaude.data 取最新收盘价，用 data.to_aud 按币种换算成澳元（澳股本身是澳元）；标注 as-of。
-3. 按 IPS「持仓分类」表把每只归入长期仓或短线仓（表里没有的新持仓先归短线仓，宽基指数 ETF 提醒我确认）；账户现金单列。计算两个仓和现金的当前占比；IPS 定了目标比例才对比，没定就写「目标待定」。
-4. 逐条检查规则，只报告被触发的（IPS 的数字是提醒线：超线每周都报，直到回到线内或 IPS 改版）：
-   - 入金：IPS 定了每月入金才对照；列出本月买入合计（profile/deals.csv，换算澳元）
-   - 两个仓的比例：报告占比；IPS 定了目标就列出离目标还差多少澳元，按 IPS 写的回归方式提醒。目标还没定时，用弹窗问我：选项写出 20% / 30% / 50% / 70% 各自的长期仓目标澳元、离现在差多少、压力测试（每只用断点后的价格重演历史最坏一次）组合可能亏多少，不替我选、不标推荐；我选了就写进 IPS 并升版本号
-   - 决策单：本月短线仓的每笔新买入在 journal/ 里有没有决策单（为什么买、什么情况算错、最多亏多少）；没有就提醒补写
-   - 分批加仓：同一只 48 小时内有两次以上买入就提醒（IPS：分 2–3 次，每次隔至少 48 小时）
-   - 行业复查：短线仓持仓对应的公司或行业营收连续两季同比下滑（美股财报走 Treg，港股走 yfinance）；触发时附上最近一次 /sector-pick 的 Jev 结果作参考
-   - 重叠：每季度第一次运行时调用 /overlap
-   - 前提失效：profile 里的应急金低于 IPS 要求
-5. 对每条触发，列出 IPS 规定的动作，并展示调整金额的计算过程。
-6. 预测记分（免费）：运行 finclaude.forecast.score() 给到期的预测打分，附 forecast.scoreboard() 的记分表（各来源、各期限的记分次数、Brier 分数、命中率，和抛硬币的 0.25 对照）；没有到期的就写「暂无到期预测」。
-7. 无论是否触发，都附风险提示（IPS「风险提示」一节），只提示，不限制：
-   - 杠杆等值敞口：杠杆 ETF 按倍数乘市值（如 3 倍 ETF × 3、2 倍 ETF × 2），列出全部持仓等值敞口合计和占组合的比例，并注明每日杠杆的长期损耗。
-   - 压力测试（假如历史上最坏的一次重演）：写明「这不是你经历过的波动」。每只用 metrics.worst_drawdown(close) 列最高点、最低点（日期、价格）、跌幅、跌了多久、何时回到高点，压力亏损 = 市值 × 跌幅（澳元）；末两行是短线仓合计、长期仓合计；再对照 IPS 可承受的最大回撤（写出除法）。杠杆 ETF 按标的等值敞口计（如跟踪单只股票的 2 倍 ETF = 2 × 市值的那只股票），历史不足 3 年时同时给出标的每日 2 倍模拟的最坏一次；自身历史短的 ETF 加美股同类基金换算成澳元的参照。早年复权价很小要说明。
-   - 价格有未复权断点（data.get_prices 的 attrs["level_breaks"]）时，只用最后一个断点之后的价格，并写明。
-产出：要点写进当周周报文档 Decision 的「月度体检」一节（第一句是「本次触发 N 条规则」或「无需操作」；先结论后细节；用取整的数）；完整报告用 finclaude.render.save_report 存到 reports/<周>/_附件/checkup/report.html（计算过程放这里），周五收尾时精简进 reports/<周>/Decision.md。
-结尾：「提醒只说明规则触发了，决定权在你。」
+1. Holdings and cash: read the latest Moomoo holdings with finclaude.account.snapshot() (read-only; US, Hong Kong and ASX) and cash and total assets in AUD with funds(), and save the snapshot. If they cannot be read, use the last snapshot in profile/holdings.csv and profile/funds.csv and state its date. The first paragraph of the report says which markets are covered; any market that could not be read must be named.
+2. Prices: convert codes with data.ticker_from_code (AU.IVV → IVV.AX), get the latest close with finclaude.data and convert to AUD by currency with data.to_aud (ASX prices are already in AUD); state the as-of date.
+3. Sort every holding into the long-term or short-term bucket using the IPS holding-classification table (「持仓分类」); a new holding that is not in the table goes to the short-term bucket, and broad index ETFs are flagged for me to confirm. List account cash separately. Compute the current share of each bucket and of cash; compare with targets only if the IPS sets them, otherwise write 「目标待定」 (target not set).
+4. Check the rules one by one and report only those triggered (IPS numbers are reminder lines: an exceeded line is reported every week until it is back inside or the IPS changes):
+   - Deposits: compare only if the IPS sets a monthly deposit; list this month's purchases (profile/deals.csv, converted to AUD).
+   - Bucket shares: report the shares; if the IPS sets a target, show how many AUD the long-term bucket is away from it and remind me as the IPS's rebalancing method says. If no target is set yet, ask me in a pop-up: each option (20% / 30% / 50% / 70%) shows the long-term target in AUD, the gap from today and the portfolio's stress-test loss (each holding replays its worst historical drawdown, using prices after the last level break); do not choose for me or mark a recommendation. Once I choose, write it into the IPS and bump the version.
+   - Decision notes: every new short-term purchase this month has a decision note in journal/ (why I bought, what would prove me wrong, the most I am willing to lose); if one is missing, remind me to write it.
+   - Staged buying: remind me when one holding was bought more than once within 48 hours (IPS: 2–3 tranches, at least 48 hours apart).
+   - Sector review: revenue of a short-term holding's company or sector has fallen year on year for two quarters in a row (US filings via Treg, Hong Kong via yfinance); when triggered, attach the latest /sector-pick Jev result for reference.
+   - Overlap: on the first run of each quarter, call /overlap.
+   - Broken premise: the emergency fund in my profile is below what the IPS requires.
+5. For each triggered rule, list the action the IPS prescribes and show how the adjustment amount was calculated.
+6. Forecast scoring (free): run finclaude.forecast.score() to score forecasts that have expired and attach forecast.scoreboard() (per source and horizon: number scored, Brier score and hit rate, against the coin-flip 0.25); if none have expired, write 「暂无到期预测」 (no forecasts due yet).
+7. Whether or not anything was triggered, add the risk reminders (the IPS risk-reminder section); they inform, they do not restrict:
+   - Leveraged equivalent exposure: multiply leveraged ETFs by their leverage (e.g. a 3x ETF × 3, a 2x ETF × 2), list the total equivalent exposure of all holdings and its share of the portfolio, and note the long-term decay of daily leverage.
+   - Stress test (if the worst episode in history happened again): state 「这不是你经历过的波动」 (this is not a move you have lived through). For each holding, use metrics.worst_drawdown(close) to list the peak and the trough (dates, prices), the fall, how long it fell and when it recovered; stress loss = market value × fall (AUD). The last two rows are the short-term and long-term bucket totals; then compare with the maximum drawdown the IPS can tolerate (show the division). Leveraged ETFs count at their underlying's equivalent exposure (e.g. a 2x ETF on a single stock = 2 × market value of that stock); with less than 3 years of history, also give the worst episode of a simulated daily 2x of the underlying; for an ETF with a short history, add a comparable US fund converted to AUD as a reference. Note when early adjusted prices are very small.
+   - When prices have an unadjusted level break (attrs["level_breaks"] from data.get_prices), use only the prices after the last break and say so.
+Output: key points go into the 「月度体检」 (monthly check-up) section of this week's Decision page (the first sentence is 「本次触发 N 条规则」 (N rules triggered) or 「无需操作」 (no action needed); conclusion first, then detail; rounded numbers). The full report is saved with finclaude.render.save_report to reports/<week>/_附件/checkup/report.html (calculations go here) and is trimmed into reports/<week>/Decision.md at the Friday wrap-up.
+Closing line: 「提醒只说明规则触发了，决定权在你。」 (a reminder only says that a rule was triggered; the decision is yours).

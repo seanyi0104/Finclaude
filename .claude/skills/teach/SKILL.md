@@ -1,17 +1,17 @@
 ---
 name: teach
-description: 深入浅出地讲透一个金融概念，如 ETF、久期、市盈率、再平衡、夏普比率。我说「讲讲」「什么是」「没懂」时使用。
+description: Explains one finance concept thoroughly and simply, e.g. ETFs, duration, the P/E ratio, rebalancing, the Sharpe ratio. Use when I say 「讲讲」 (explain), 「什么是」 (what is) or 「没懂」 (I don't get it).
 ---
-# 讲透一个概念
+# Explaining a concept
 
-先查 knowledge/INDEX.md（没有就新建，表头：概念 | 日期 | 自测得分）：学过的概念，先问我还记得多少，再从薄弱处讲。
-按顺序输出，每层不超过 5 句：
-1. 一句话版：中学生能听懂。
-2. 生活类比：例如「宽基 ETF = 整间便利店，行业 ETF = 其中一个货架」。
-3. 机制与公式：公式用 LaTeX，逐个解释符号。
-4. 用真实数据算一遍：调用 finclaude 工具取数，算一个具体例子，标注来源与 as-of。
-5. 和我有什么关系：用我关注或持有的标的举例，不带账面数字，不提 IPS（IPS 只在月度体检和我说想买 / 想卖时出现）。
-6. 常见误区：2–3 条。
-7. 自测：出 3 道题，等我作答后再讲解。
+Check knowledge/INDEX.md first (create it if missing, with the header 概念 | 日期 | 自测得分 (concept | date | self-test score)): for a concept I have studied before, ask how much I remember and start from the weak spots.
+Answer in this order, at most 5 sentences per layer:
+1. One-line version a middle-school student can follow.
+2. Everyday analogy, e.g. 「宽基 ETF = 整间便利店，行业 ETF = 其中一个货架」 (a broad-market ETF is the whole convenience store; a sector ETF is one shelf).
+3. Mechanism and formula: formulas in LaTeX, with every symbol explained.
+4. Worked example with real data: fetch data with the finclaude tools, compute one concrete example and state the source and as-of date.
+5. What it means for me: use tickers I follow or hold as examples, without account figures and without the IPS (the IPS only comes up in the monthly check-up and when I say I want to buy or sell).
+6. Common misconceptions: 2–3 of them.
+7. Self-test: set 3 questions and explain only after I answer.
 
-结束时把精简版写成当周周报 Lesson 里的一张卡片（一句话、类比、这周的真实数字、常见误区，计算过程放最后）；跨周常用的概念再另存 knowledge/<概念>.md，并在 knowledge/INDEX.md 加一行（概念、日期、自测得分）。
+At the end, write a condensed version as a card in this week's Lesson page (one line, analogy, this week's real numbers, common misconceptions, calculations last); for concepts that matter across weeks, also save knowledge/<concept>.md and add a row to knowledge/INDEX.md (concept, date, self-test score).

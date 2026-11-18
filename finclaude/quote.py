@@ -83,7 +83,7 @@ def extended_hours(codes: list[str], now: dt.datetime | None = None, host: str =
     """The price trading right now for each US code and its change as Moomoo gives it (against the last regular
     close), with the snapshot's time stamp (US Eastern). Only the session trading now is read, and a price left over
     from an earlier day is dropped (price and change empty, the note says why). Outside every session (and on
-    holidays, which show no new trades): the last close, marked 休市."""
+    holidays, which show no new trades): the last close, marked 休市 (market closed)."""
     session = us_session(now or dt.datetime.now().astimezone())
     table = _query(host, port, lambda ctx: _check(*ctx.get_market_snapshot(list(codes)), "读取快照"))
     rows = []

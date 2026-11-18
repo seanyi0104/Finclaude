@@ -99,7 +99,8 @@ def test_shares_without_deals_are_flagged(monkeypatch):
 
 
 def test_deal_history_is_read_in_windows_the_server_accepts(monkeypatch):
-    # OpenD: 单次查询的时间跨度不能超过 360 天 (2026-10-05). 2025-10-11..2026-10-05 was accepted.
+    # OpenD: "单次查询的时间跨度不能超过 360 天" (a single query may not span more than 360 days, 2026-10-05).
+    # 2025-10-11..2026-10-05 was accepted.
     ctx = use(monkeypatch, [], [])
     account.snapshot(deals_since=dt.date(2023, 1, 1))
     windows = [(start, end) for market, start, end in ctx.windows if market == TrdMarket.US]
@@ -131,7 +132,8 @@ def test_australian_holdings_are_read_through_one_all_markets_context(monkeypatc
 
 
 def test_deal_queries_stay_under_the_rate_limit(monkeypatch):
-    # OpenD: 查询历史成交频率太高，每30秒最多10次 (2026-10-06, three markets x four windows = 12 calls).
+    # OpenD: "查询历史成交频率太高，每30秒最多10次" (deal history queried too often: at most 10 calls per 30 seconds;
+    # 2026-10-06, three markets x four windows = 12 calls).
     clock = {"now": 0.0}
     calls = []
     monkeypatch.setattr(account.time, "monotonic", lambda: clock["now"])
@@ -234,7 +236,8 @@ class WithFlows(FakeContext):
 
 
 def test_cash_flows_are_read_one_clearing_date_at_a_time_without_ids(monkeypatch):
-    # 2026-10-19: OpenD answered a ranged query with "仅支持通过清算日期查询资金流水" for this account
+    # 2026-10-19: OpenD answered a ranged query with "仅支持通过清算日期查询资金流水" (cash flows can only be
+    # queried by clearing date) for this account
     WithFlows.asked = []
     monkeypatch.setattr(account, "OpenSecTradeContext", WithFlows)
     table = account.cash_flows(dt.date(2026, 10, 18), dt.date(2026, 10, 24))
@@ -245,7 +248,8 @@ def test_cash_flows_are_read_one_clearing_date_at_a_time_without_ids(monkeypatch
 
 
 def test_cash_flow_queries_stay_under_the_rate_limit(monkeypatch):
-    # OpenD: 查询现金流水频率太高，请求失败，每30秒最多20次 (2026-10-19)
+    # OpenD: "查询现金流水频率太高，请求失败，每30秒最多20次" (cash flows queried too often: at most 20 calls per
+    # 30 seconds, 2026-10-19)
     clock, calls = {"now": 0.0}, []
     monkeypatch.setattr(account.time, "monotonic", lambda: clock["now"])
     monkeypatch.setattr(account.time, "sleep", lambda seconds: clock.__setitem__("now", clock["now"] + seconds))

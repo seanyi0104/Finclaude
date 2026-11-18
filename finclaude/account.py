@@ -43,17 +43,20 @@ COLUMNS = {
 HOLDINGS_ORDER = ["code", "name", "market", "qty", "cost_price", "cost_total", "first_buy", "last_buy",
                   "qty_no_deal", "market_value", "currency", "as_of"]
 
-# OpenD refuses longer ranges: "单次查询的时间跨度不能超过 360 天" (2026-10-05); 359 days apart was accepted.
+# OpenD refuses longer ranges: "单次查询的时间跨度不能超过 360 天" (a single query may not span more than 360
+# days, 2026-10-05); 359 days apart was accepted.
 DEAL_WINDOW_DAYS = 359
 DEAL_LOOKBACK_DAYS = 3 * 360
-# OpenD: 查询历史成交频率太高，每30秒最多10次 (2026-10-06). Stay one under the limit with a little slack.
+# OpenD: "查询历史成交频率太高，每30秒最多10次" (deal history queried too often: at most 10 calls per 30 seconds,
+# 2026-10-06). Stay one under the limit with a little slack.
 DEAL_RATE_CALLS, DEAL_RATE_SECONDS = 9, 31.0
 DEAL_COLUMNS = {"code": "code", "stock_name": "name", "deal_market": "market", "trd_side": "side",
                 "qty": "qty", "price": "price", "create_time": "time"}
 BUY_SIDES = {"BUY", "BUY_BACK"}
 QTY_EPS = 1e-9
-# OpenD: 查询现金流水频率太高，请求失败，每30秒最多20次 (2026-10-19). This account also refuses date ranges
-# ("仅支持通过清算日期查询资金流水"), so cash flows are read one clearing date per call.
+# OpenD: "查询现金流水频率太高，请求失败，每30秒最多20次" (cash flows queried too often: at most 20 calls per
+# 30 seconds, 2026-10-19). This account also refuses date ranges ("仅支持通过清算日期查询资金流水": cash flows can
+# only be queried by clearing date), so cash flows are read one clearing date per call.
 FLOW_RATE_CALLS, FLOW_RATE_SECONDS = 19, 31.0
 FLOW_COLUMNS = ["clearing_date", "currency", "cashflow_type", "cashflow_direction", "cashflow_amount", "cashflow_remark"]
 # Account funds in AUD; the per-currency cash columns show where the cash sits.

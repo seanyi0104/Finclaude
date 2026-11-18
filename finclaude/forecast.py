@@ -1,6 +1,6 @@
 """Forecast cards: for each holding and horizon, the odds of a higher price, taken from data and models, never from Claude.
 
-Sources (CLAUDE.md, 铁律):
+Sources (CLAUDE.md, Iron rules):
 - history: the share of past windows of the same length that ended higher (daily prices via finclaude.data),
   over all history, the last 10 years, and the past days in the same trend state as today (close vs 200-day average)
 - options: risk-neutral odds N(d2) and the ±1σ range from at-the-money implied volatility (yfinance chain). The
@@ -293,7 +293,7 @@ def _pct(p) -> str:
     return "无可靠数据" if p is None or pd.isna(p) else f"{p:.1%}"
 
 
-HORIZON_WORDS = {"2w": "2 周", "6m": "半年"}  # names that are not "N 个月"
+HORIZON_WORDS = {"2w": "2 周", "6m": "半年"}  # names that are not "N 个月" (N months)
 
 
 def _horizon_name(h: str) -> str:
@@ -398,7 +398,8 @@ def card_markdown(prep: dict, rows: list[dict], board: pd.DataFrame) -> str:
 
 
 def primer_markdown(prep: dict, row: dict) -> str:
-    """读卡前的小课堂, worked through with one holding's real numbers: `row` is its 1-month card row, with options."""
+    """The 读卡前的小课堂 primer (a short lesson before the cards), worked through with one holding's real numbers:
+    `row` is its 1-month card row, with options."""
     t, unit, spot = prep["ticker"], CURRENCY_NAMES.get(prep.get("currency", "USD"), ""), prep["close"]
     iv, days, target = row["iv"], row["option_days"], row["target_date"]
     root = math.sqrt(days / 365)
